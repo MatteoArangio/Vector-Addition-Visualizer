@@ -9,9 +9,20 @@
 <body>
 <header class="topbar">
   <h1>Vector Addition</h1>
-  <button id="theme" class="icon-btn" type="button" aria-label="Switch between dark and light theme">
-    <span aria-hidden="true">&#9680;</span>
-  </button>
+  <div class="topbar-tools">
+    <button id="expand" class="icon-btn" type="button" aria-pressed="false"
+            aria-label="Expand to full screen" title="Full screen">
+      <svg class="i-expand" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M6 2H2v4M14 6V2h-4M10 14h4v-4M2 10v4h4"/>
+      </svg>
+      <svg class="i-collapse" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2 6h4V2M14 6h-4V2M14 10h-4v4M2 10h4v4"/>
+      </svg>
+    </button>
+    <button id="theme" class="icon-btn" type="button" aria-label="Switch between dark and light theme">
+      <span aria-hidden="true">&#9680;</span>
+    </button>
+  </div>
 </header>
 
 <main>

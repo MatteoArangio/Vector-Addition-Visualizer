@@ -2,7 +2,11 @@
   const el = id => document.getElementById(id);
   const inputs = { v1x: el('v1x'), v1y: el('v1y'), v2x: el('v2x'), v2y: el('v2y') };
   const out = { x: el('v3x'), y: el('v3y') };
-  const btn = { add: el('add'), replay: el('replay'), reset: el('reset'), theme: el('theme') };
+  const btn = {
+    add: el('add'), replay: el('replay'), reset: el('reset'),
+    theme: el('theme'), expand: el('expand')
+  };
+  const root = document.documentElement;
   const statusLine = el('status');
   const group3 = document.querySelector('.vgroup[data-v="3"]');
 
@@ -72,8 +76,37 @@
       'v\u2083 = (' + fmt(model.v3.x) + ', ' + fmt(model.v3.y) + ')';
   }
 
+  // The usable extent depends on the canvas aspect, so a window resize can
+  // change it. Snap rather than animate, unless a sequence is mid-flight.
+  function refit() {
+    if (animating) return;
+    S.half = Scene.fitHalf([model.v1, model.v2, model.v3]);
+  }
+
+  // Expanded mode gives the plane the whole window; real full screen is asked
+  // for too, and the layout still expands in-window if that request is denied.
+  function setExpanded(on) {
+    if (on) root.dataset.expanded = '';
+    else delete root.dataset.expanded;
+    btn.expand.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.expand.setAttribute('aria-label', on ? 'Leave full screen' : 'Expand to full screen');
+    btn.expand.setAttribute('title', on ? 'Leave full screen' : 'Full screen');
+  }
+
+  function toggleExpanded() {
+    const on = !('expanded' in root.dataset);
+    if (on && root.requestFullscreen) {
+      const req = root.requestFullscreen();
+      if (req && req.catch) req.catch(() => {});
+    } else if (!on && document.fullscreenElement && document.exitFullscreen) {
+      const exit = document.exitFullscreen();
+      if (exit && exit.catch) exit.catch(() => {});
+    }
+    setExpanded(on);
+  }
+
   function applyTheme(mode) {
-    document.documentElement.dataset.theme = mode;
+    root.dataset.theme = mode;
     try { localStorage.setItem('vav-theme', mode); } catch (e) { /* private mode */ }
     Scene.setColors();
     Scene.requestDraw();
@@ -315,10 +348,17 @@
   btn.reset.addEventListener('click', reset);
 
   btn.theme.addEventListener('click', () => {
-    applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+    applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light');
   });
 
-  Scene.init();
+  btn.expand.addEventListener('click', toggleExpanded);
+
+  // Esc leaves full screen without going through the button.
+  document.addEventListener('fullscreenchange', () => {
+    setExpanded(!!document.fullscreenElement);
+  });
+
+  Scene.init(refit);
   initTheme();
   syncUI();
 })();

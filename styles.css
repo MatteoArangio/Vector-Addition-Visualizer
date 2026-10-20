@@ -13,8 +13,12 @@
   --v2: #fc6255;
   --v3: #f4d345;
   --glow: 1;
+  --compact: 780px;
+  --shell: 1480px;
   color-scheme: dark;
 }
+
+:root { background: var(--bg); }
 
 :root[data-theme="light"] {
   --bg: #ffffff;
@@ -45,7 +49,7 @@ body {
 }
 
 .topbar {
-  width: min(100%, 780px);
+  width: min(100%, var(--compact));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -75,8 +79,23 @@ body {
 
 .icon-btn:hover { border-color: var(--muted); }
 
+.icon-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.topbar-tools { display: flex; gap: 8px; }
+
+.i-collapse { display: none; }
+:root[data-expanded] .i-expand { display: none; }
+:root[data-expanded] .i-collapse { display: block; }
+
 main {
-  width: min(100%, 780px);
+  width: min(100%, var(--compact));
   padding: 0 20px 32px;
   display: flex;
   flex-direction: column;
@@ -169,7 +188,7 @@ input.comp::placeholder { color: var(--muted); opacity: .5; font-style: italic; 
 
 output.comp {
   display: block;
-  min-height: 2.07rem;
+  min-height: calc(1.2em + 14px);
   color: var(--accent);
   font-weight: 600;
 }
@@ -234,11 +253,39 @@ input.comp:focus-visible {
 }
 
 @media (max-width: 540px) {
-  .plane-wrap { width: 100%; }
   .equation { gap: 9px; }
   .comp { width: 3.8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .btn, .vgroup[data-v="2"] input.comp:not(:disabled) { animation: none; }
+}
+
+/* Expanded mode: the plane claims the whole window (or screen). */
+:root[data-expanded] .topbar,
+:root[data-expanded] main {
+  width: min(100%, var(--shell));
+}
+
+:root[data-expanded] main {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 20px 24px;
+  gap: 18px;
+}
+
+:root[data-expanded] .plane-wrap {
+  flex: 1 1 auto;
+  width: 100%;
+  aspect-ratio: auto;
+  min-height: 260px;
+  max-height: calc(100vw - 2.5rem);
+}
+
+@media (min-width: 900px) {
+  :root[data-expanded] .comp { width: 5.4rem; font-size: 1.2rem; }
+  :root[data-expanded] .op { font-size: 2rem; padding-bottom: 24px; }
+  :root[data-expanded] .caption { font-size: 1.15rem; }
+  :root[data-expanded] .btn { padding: 11px 22px; font-size: 1rem; }
+  :root[data-expanded] .bracket { padding: 10px 18px; }
 }

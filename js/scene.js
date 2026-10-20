@@ -16,6 +16,7 @@ const Scene = (() => {
   let w = 1;
   let h = 1;
   let pending = false;
+  let onResize = null;
 
   function setColors() {
     const css = getComputedStyle(document.documentElement);
@@ -41,6 +42,7 @@ const Scene = (() => {
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (onResize) onResize();
     draw();
   }
 
@@ -245,14 +247,20 @@ const Scene = (() => {
 
   // Half-extent that keeps every given vector comfortably in view.
   function fitHalf(vectors) {
-    let m = 0;
+    const wide = w >= h;
+    let along = 0;
+    let across = 0;
     for (const v of vectors) {
-      if (v) m = Math.max(m, Math.abs(v.x), Math.abs(v.y));
+      if (!v) continue;
+      along = Math.max(along, Math.abs(wide ? v.x : v.y));
+      across = Math.max(across, Math.abs(wide ? v.y : v.x));
     }
-    return Math.max(10, m * 1.15);
+    const ratio = Math.max(w, h) / Math.min(w, h);
+    return Math.max(10, 1.15 * Math.max(across, along / ratio));
   }
 
-  function init() {
+  function init(hook) {
+    onResize = hook || null;
     setColors();
     new ResizeObserver(resize).observe(canvas);
     window.addEventListener('resize', resize);
