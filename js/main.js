@@ -14,6 +14,7 @@
   const model = { v1: null, v2: null, v3: null };
   const ORDER = ['v1x', 'v1y', 'v2x', 'v2y'];
   const LIMIT = 1e4;
+  const DIM = 0.35;
   const NUMBER = /^-?(\d+(\.\d*)?|\.\d+)$/;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -131,6 +132,7 @@
     const sumGrow = S.v3.grow;
     const ghost = S.v2.ghost;
     const off = { x: S.v2.offset.x, y: S.v2.offset.y };
+    const dim = { v1: S.v1.alpha, v2: S.v2.alpha };
 
     model[which] = vec;
     if (hadSum) {
@@ -150,6 +152,8 @@
 
     await Anim.tween(ms(first ? 600 : 300), t => {
       S.half = Anim.lerp(h0, h1, t);
+      S.v1.alpha = Anim.lerp(dim.v1, 1, t);
+      S.v2.alpha = Anim.lerp(dim.v2, 1, t);
       if (first) {
         S[which].grow = t;
       } else {
@@ -183,11 +187,14 @@
     const grow = { v1: S.v1.grow, v2: S.v2.grow, v3: S.v3.grow };
     const ghost = S.v2.ghost;
     const off = { x: S.v2.offset.x, y: S.v2.offset.y };
+    const dim = { v1: S.v1.alpha, v2: S.v2.alpha };
     const h0 = S.half;
     const h1 = Scene.fitHalf([model.v1, model.v2]);
 
     await Anim.tween(ms(320), t => {
       S.half = Anim.lerp(h0, h1, t);
+      S.v1.alpha = Anim.lerp(dim.v1, 1, t);
+      S.v2.alpha = Anim.lerp(dim.v2, 1, t);
       for (const k of dropped) S[k].grow = grow[k] * (1 - t);
       S.v3.grow = grow.v3 * (1 - t);
       S.v2.ghost = ghost * (1 - t);
@@ -266,6 +273,15 @@
     showSum(sum, 1);
     animating = false;
     syncUI();
+
+    // Let the result settle, then pull the addends back so v3 carries the eye.
+    if (!await Anim.delay(ms(500), tk)) return;
+    const from = { v1: S.v1.alpha, v2: S.v2.alpha };
+    await Anim.tween(ms(600), t => {
+      S.v1.alpha = Anim.lerp(from.v1, DIM, t);
+      S.v2.alpha = Anim.lerp(from.v2, DIM, t);
+      Scene.requestDraw();
+    }, tk);
   }
 
   async function replay() {
@@ -273,12 +289,15 @@
     const ghost = S.v2.ghost;
     const sumGrow = S.v3.grow;
     const off = { x: S.v2.offset.x, y: S.v2.offset.y };
+    const dim = { v1: S.v1.alpha, v2: S.v2.alpha };
 
     animating = true;
     clearSum();
     syncUI();
 
     await Anim.tween(ms(260), t => {
+      S.v1.alpha = Anim.lerp(dim.v1, 1, t);
+      S.v2.alpha = Anim.lerp(dim.v2, 1, t);
       S.v2.offset = Anim.lerpVec(off, zero(), t);
       S.v2.ghost = ghost * (1 - t);
       S.v3.grow = sumGrow * (1 - t);
@@ -300,9 +319,12 @@
     const grow = { v1: S.v1.grow, v2: S.v2.grow, v3: S.v3.grow };
     const ghost = S.v2.ghost;
     const off = { x: S.v2.offset.x, y: S.v2.offset.y };
+    const dim = { v1: S.v1.alpha, v2: S.v2.alpha };
     const h0 = S.half;
 
     await Anim.tween(ms(420), t => {
+      S.v1.alpha = Anim.lerp(dim.v1, 1, t);
+      S.v2.alpha = Anim.lerp(dim.v2, 1, t);
       S.v1.grow = grow.v1 * (1 - t);
       S.v2.grow = grow.v2 * (1 - t);
       S.v3.grow = grow.v3 * (1 - t);

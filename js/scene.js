@@ -6,8 +6,8 @@ const Scene = (() => {
   const ORIGIN = { x: 0, y: 0 };
 
   const state = {
-    v1: { vec: { x: 0, y: 0 }, grow: 0 },
-    v2: { vec: { x: 0, y: 0 }, grow: 0, offset: { x: 0, y: 0 }, ghost: 0 },
+    v1: { vec: { x: 0, y: 0 }, grow: 0, alpha: 1 },
+    v2: { vec: { x: 0, y: 0 }, grow: 0, offset: { x: 0, y: 0 }, ghost: 0, alpha: 1 },
     v3: { vec: { x: 0, y: 0 }, grow: 0 },
     half: 10
   };
@@ -220,19 +220,20 @@ const Scene = (() => {
     // v2 left behind at the origin while its copy slides to the tip of v1
     if (state.v2.ghost > 0.01) {
       drawArrow(ORIGIN, state.v2.vec, colors.v2, {
-        grow: state.v2.grow, dashed: true, alpha: state.v2.ghost, width: 3
+        grow: state.v2.grow, dashed: true, alpha: state.v2.ghost * state.v2.alpha, width: 3
       });
     }
 
-    drawArrow(ORIGIN, state.v1.vec, colors.v1, { grow: state.v1.grow });
+    drawArrow(ORIGIN, state.v1.vec, colors.v1,
+      { grow: state.v1.grow, alpha: state.v1.alpha });
     drawLabel('1', ORIGIN, Anim.lerpVec(ORIGIN, state.v1.vec, state.v1.grow),
-      colors.v1, state.v1.grow);
+      colors.v1, state.v1.grow * state.v1.alpha);
 
     const tail = state.v2.offset;
     const head = { x: tail.x + state.v2.vec.x, y: tail.y + state.v2.vec.y };
-    drawArrow(tail, head, colors.v2, { grow: state.v2.grow });
+    drawArrow(tail, head, colors.v2, { grow: state.v2.grow, alpha: state.v2.alpha });
     drawLabel('2', tail, Anim.lerpVec(tail, head, state.v2.grow),
-      colors.v2, state.v2.grow);
+      colors.v2, state.v2.grow * state.v2.alpha);
 
     drawArrow(ORIGIN, state.v3.vec, colors.v3, { grow: state.v3.grow, width: 5 });
     drawLabel('3', ORIGIN, Anim.lerpVec(ORIGIN, state.v3.vec, state.v3.grow),
