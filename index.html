@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vector Addition Visualizer</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>Vector Addition</h1>
+  <button id="theme" class="icon-btn" type="button" aria-label="Switch between dark and light theme">
+    <span aria-hidden="true">&#9680;</span>
+  </button>
+</header>
+
+<main>
+  <div class="plane-wrap">
+    <canvas id="plane"></canvas>
+  </div>
+
+  <div class="equation">
+    <div class="vgroup" data-v="1">
+      <div class="bracket">
+        <input id="v1x" class="comp" type="text" inputmode="decimal" autocomplete="off"
+               spellcheck="false" placeholder="x" aria-label="Vector 1, x component">
+        <input id="v1y" class="comp" type="text" inputmode="decimal" autocomplete="off"
+               spellcheck="false" placeholder="y" aria-label="Vector 1, y component">
+      </div>
+      <span class="caption">v<sub>1</sub></span>
+    </div>
+
+    <span class="op" aria-hidden="true">+</span>
+
+    <div class="vgroup" data-v="2">
+      <div class="bracket">
+        <input id="v2x" class="comp" type="text" inputmode="decimal" autocomplete="off"
+               spellcheck="false" placeholder="x" aria-label="Vector 2, x component" disabled>
+        <input id="v2y" class="comp" type="text" inputmode="decimal" autocomplete="off"
+               spellcheck="false" placeholder="y" aria-label="Vector 2, y component" disabled>
+      </div>
+      <span class="caption">v<sub>2</sub></span>
+    </div>
+
+    <span class="op" aria-hidden="true">=</span>
+
+    <div class="vgroup" data-v="3">
+      <div class="bracket">
+        <output id="v3x" class="comp" aria-label="Sum, x component"></output>
+        <output id="v3y" class="comp" aria-label="Sum, y component"></output>
+      </div>
+      <span class="caption">v<sub>3</sub></span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="add" class="btn primary" type="button" hidden>Add vectors</button>
+    <button id="replay" class="btn" type="button" hidden>&#8635; Replay</button>
+    <button id="reset" class="btn" type="button" hidden>Start from scratch</button>
+  </div>
+
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+</main>
+
+<script src="js/anim.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
