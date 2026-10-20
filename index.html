@@ -8,7 +8,18 @@
 </head>
 <body>
 <header class="topbar">
-  <h1>Vector Addition</h1>
+  <h1>
+    Vector Addition
+    <span class="info">
+      <button class="info-dot" type="button" aria-describedby="about"
+              aria-label="About this visualizer">i</button>
+      <span class="info-bubble" role="tooltip" id="about">
+        Built for learning purposes: this web app shows how two 2D vectors add by the head-to-tail
+        method: v<sub>2</sub> is carried to the tip of v<sub>1</sub>, and
+        their sum runs from the origin to where it lands.
+      </span>
+    </span>
+  </h1>
   <div class="topbar-tools">
     <button id="expand" class="icon-btn" type="button" aria-pressed="false"
             aria-label="Expand to full screen" title="Full screen">

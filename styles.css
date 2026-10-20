@@ -58,11 +58,63 @@ body {
 
 .topbar h1 {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: .8rem;
   font-weight: 600;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+.info { position: relative; display: inline-flex; }
+
+.info-dot {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font: italic 11px/1 Georgia, "Times New Roman", serif;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: help;
+  opacity: .75;
+}
+
+.info-dot:hover, .info-dot:focus { opacity: 1; }
+
+.info-bubble {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: -9px;
+  z-index: 5;
+  width: max-content;
+  max-width: 270px;
+  padding: 10px 13px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--panel);
+  color: var(--text);
+  font: 400 .78rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-transform: none;
+  letter-spacing: normal;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity .18s, transform .18s, visibility .18s;
+  pointer-events: none;
+}
+
+.info-dot:hover + .info-bubble,
+.info-dot:focus + .info-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .icon-btn {
@@ -239,6 +291,7 @@ output.comp {
 
 .btn:focus-visible,
 .icon-btn:focus-visible,
+.info-dot:focus-visible,
 input.comp:focus-visible {
   outline: 2px solid var(--accent, var(--muted));
   outline-offset: 2px;
@@ -259,6 +312,7 @@ input.comp:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .btn, .vgroup[data-v="2"] input.comp:not(:disabled) { animation: none; }
+  .info-bubble { transition: none; }
 }
 
 /* Expanded mode: the plane claims the whole window (or screen). */
