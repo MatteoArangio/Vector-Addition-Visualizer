@@ -2,6 +2,8 @@
 
 A small web app that shows how two 2D vectors add, using the head-to-tail method.
 
+**[Try it live](https://matteoarangio.github.io/Vector-Addition-Visualizer/)**
+
 Enter the components of **v₁** and it is drawn on the plane; the fields for **v₂** then unlock.
 Once both vectors are on screen, *Add vectors* animates the construction: a copy of v₂ travels
 from the origin to the tip of v₁ (leaving a dashed outline where it started), and the sum grows
@@ -9,9 +11,10 @@ from the origin to the new tip while the result fills in.
 
 ## Running it
 
-Open `index.html` in a browser. There is no build step and nothing to install.
+The quickest way is the [live version](https://matteoarangio.github.io/Vector-Addition-Visualizer/) - no install, no build step.
 
-To serve it locally instead: `python -m http.server` and visit `http://localhost:8000`.
+From a clone, open `index.html` directly in a browser, or serve it with
+`python -m http.server` and visit `http://localhost:8000`.
 
 ## Features
 
