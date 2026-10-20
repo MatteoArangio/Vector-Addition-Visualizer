@@ -31,6 +31,8 @@ To serve it locally instead: `python -m http.server` and visit `http://localhost
 | `js/scene.js` | Canvas rendering: grid, axes, arrows, labels |
 | `js/main.js` | Input handling, state, animation sequences |
 
-No dependencies, no frameworks — plain HTML, CSS and JavaScript.
+No dependencies, no frameworks - plain HTML, CSS and JavaScript.
 
-The visual style is inspired by [3blue1brown](https://www.3blue1brown.com/).
+## License
+
+Released under the [MIT License](LICENSE).
