@@ -30,6 +30,7 @@ From a clone, open `index.html` directly in a browser, or serve it with
 | --- | --- |
 | `index.html` | Markup: the canvas, the equation row, the buttons |
 | `styles.css` | Theme variables and layout |
+| `favicon.svg` | Tab icon, with `favicon.png` as a fallback for older browsers |
 | `js/anim.js` | Easing and a small promise-based tween helper |
 | `js/scene.js` | Canvas rendering: grid, axes, arrows, labels |
 | `js/main.js` | Input handling, state, animation sequences |
